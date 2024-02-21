@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            background-image: url('blue.jpg');
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 100px;
+            background-color: rgb(36, 34, 34);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: whitesmoke;
+        }
+
+        .todo {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .todo input[type="text"] {
+            width: calc(100% - 80px);
+            padding: 10px;
+            border: 1px solid #ccccccbe;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .todo button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .tasks{
+            list-style-type: none;
+            padding: 0;.inline-form input[type="text"];
+        }
+        .tasks li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to My Todo App</h1>
+        <div class="todo">
+            <form action="/add_task" method="POST">
+                <input type="text" name="task" placeholder="Enter task"><button type="submit">Create</button>
+            </form>
+        </div>
+        <div class="tasks" >
+            <ul id="tasklist">
+                {% for task in tasks %}
+                <li>
+                    {{ task }}
+
+                    <a type="button" class="close" href="{{ url_for('delete_task', index=loop.index0) }}">&times;</a>
+
+                    <button class="editBtn" onclick="showEditForm('{{ loop.index0 }}')">Edit</button>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <div id="editForm" style="display: none;">
+                <form action="/update_task" method="POST">
+                    <input type="text" id="editedTask" name="editedTask" placeholder="Edit task">
+                    <input type="hidden" id="taskIndex" name="taskIndex" value="">
+                    <button type="submit">Update</button>
+                    <button type="button" onclick="hideEditForm()">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showEditForm(index) {
+            var task = document.getElementById('tasklist').getElementsByTagName('li')[index].innerText.trim();
+            document.getElementById('editedTask').value = task;
+            document.getElementById('taskIndex').value = index;
+            document.getElementById('editForm').style.display = 'block';
+        }
+    
+        function hideEditForm() {
+            document.getElementById('editForm').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
